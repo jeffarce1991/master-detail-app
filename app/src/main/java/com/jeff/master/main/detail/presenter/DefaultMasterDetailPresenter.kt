@@ -1,16 +1,22 @@
 package com.jeff.master.main.detail.presenter
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
+import com.jeff.master.database.local.Media
 import com.jeff.master.main.detail.view.MasterDetailView
 import com.jeff.master.supplychain.track.MediaLoader
 import com.jeff.master.utilities.rx.RxSchedulerUtils
+import com.jeff.master.webservices.exception.NoInternetException
+import com.jeff.master.webservices.internet.RxInternet
+import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import javax.inject.Inject
 
 class DefaultMasterDetailPresenter @Inject
 constructor(
-    private val mediaLoader: MediaLoader,
-    private val schedulers: RxSchedulerUtils
+    private val loader: MediaLoader,
+    private val schedulers: RxSchedulerUtils,
+    private val internet: RxInternet
 ): MvpBasePresenter<MasterDetailView>(),
     MasterDetailPresenter {
 
@@ -47,7 +53,35 @@ constructor(
         if (!disposable.isDisposed) disposable.dispose()
     }
 
-    override fun loadDetail(id: String) {
-        TODO("Not yet implemented")
+    override fun loadDetails(id: Int) {
+        internet.isConnected()
+            .andThen(loader.loadById(id))
+            .compose(schedulers.forSingle())
+            .subscribe(object : SingleObserver<Media> {
+                override fun onSuccess(t: Media) {
+                    Timber.d("==q onSuccess $t" )
+                    view!!.hideProgress()
+                    view!!.setDetails(t)
+                    dispose()
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    view!!.showProgress()
+                    disposable = d
+                }
+
+                override fun onError(e: Throwable) {
+                    Timber.d("==q onError $e" )
+                    e.printStackTrace()
+
+                    view!!.hideProgress()
+
+                    if (e is NoInternetException) {
+                        view!!.showError(e.message!!)
+                    } else {
+                        dispose()
+                    }
+                }
+            })
     }
 }
