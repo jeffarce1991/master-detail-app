@@ -6,4 +6,6 @@ import io.reactivex.Single
 interface MediaRemoteLoader {
 
     fun loadAll(): Single<MediaResultsDto>
+
+    fun loadById(id: Int): Single<MediaResultsDto>
 }
