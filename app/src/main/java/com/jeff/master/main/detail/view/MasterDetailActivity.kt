@@ -46,8 +46,8 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_country_detail)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_country_detail)
+        setContentView(R.layout.activity_master_detail)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_master_detail)
 
         setUpToolbarTitle()
         //countryDetailPresenter.loadCases(intent.getStringExtra(EXTRA_COUNTRY_CODE))
