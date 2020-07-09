@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -13,7 +14,9 @@ import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter.CustomViewHolder
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.CustomRowBinding
+import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.squareup.picasso.Picasso
+import timber.log.Timber
 import java.util.*
 import kotlin.Comparator
 
@@ -24,6 +27,7 @@ internal class CustomAdapter(
 
     internal inner class CustomViewHolder(binding: CustomRowBinding) :
         ViewHolder(binding.root) {
+        var item: ConstraintLayout = binding.item
         var txtTitle: TextView = binding.title
         var txtGenre: TextView = binding.genre
         var txtPrice: TextView = binding.price
@@ -50,6 +54,16 @@ internal class CustomAdapter(
             .placeholder(R.drawable.ic_placeholder)
             .error(R.drawable.ic_placeholder)
             .into(holder.coverImage)
+
+        holder.item.setOnClickListener {
+            val selectedMedia = dataList[position]
+            val intent = MasterDetailActivity.getStartIntent(
+                context,
+                selectedMedia.id,
+                selectedMedia.trackName
+            )
+            context.startActivity(intent)
+        }
     }
 
     private fun setTrackName(holder: CustomViewHolder, position: Int) {
