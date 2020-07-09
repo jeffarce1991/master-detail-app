@@ -40,7 +40,6 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         mainPresenter.getTracks()
     }
 
-Default
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
