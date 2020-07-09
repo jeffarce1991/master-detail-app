@@ -5,12 +5,16 @@ import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.jeff.master.main.detail.presenter.DefaultMasterDetailPresenter
 import com.jeff.master.R
+import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.database.local.Media
-import com.jeff.master.databinding.ActivityCountryDetailBinding
+import com.jeff.master.databinding.ActivityMasterDetailBinding
+
+
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -22,7 +26,7 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
 
     private lateinit var progressDialog: ProgressDialog
 
-    private lateinit var binding : ActivityCountryDetailBinding
+    private lateinit var binding : ActivityMasterDetailBinding
 
     companion object {
         private var EXTRA_ID = "EXTRA_ID"
@@ -65,6 +69,7 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
         binding.countryDetailToolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
+
     override fun createPresenter(): DefaultMasterDetailPresenter {
         return masterDetailPresenter
     }
@@ -90,11 +95,11 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
     }
 
     override fun hideProgress() {
-        progressDialog.dismiss()
+        binding.progressBar.visibility = View.GONE
     }
 
-    override fun setDetails(media: Media) {
-        TODO("Not yet implemented")
+    override fun showProgress() {
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     override fun showError(message: String) {
