@@ -7,6 +7,7 @@ class MediaDto(
     @field:SerializedName("kind") var kind: String,
     @field:SerializedName("artistId") var artistId: Int,
     @field:SerializedName("trackId") var trackId: Int,
+    @field:SerializedName("collectionId") var collectionId: Int,
     @field:SerializedName("artistName") var artistName: String,
     @field:SerializedName("trackName") var trackName: String? = "",
     @field:SerializedName("collectionName") var collectionName: String,
