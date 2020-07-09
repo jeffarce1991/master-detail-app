@@ -3,7 +3,7 @@ package com.jeff.master.main.view
 import com.hannesdorfmann.mosby.mvp.MvpView
 import com.jeff.master.database.local.Media
 
-interface MainView : MvpView {
+interface MasterListView : MvpView {
      fun hideProgress()
      fun showProgressRemote()
      fun showProgressLocal()
