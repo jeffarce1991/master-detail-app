@@ -21,9 +21,14 @@ data class Media constructor(
     @ColumnInfo(name = "hd_price")
                  var hdPrice: Double? = null,
     @ColumnInfo(name = "genre")
-                 var genre: String) {
+                 var genre: String,
+    @ColumnInfo(name = "short_description")
+                 var shortDescription: String? = null,
+    @ColumnInfo(name = "long_description")
+                 var longDescription: String? = null) {
 
-    constructor(): this(0, "", "","", "", 0.0, 0.0, "")
+    constructor(): this(0, "", "","", "", 0.0,
+        0.0, "", "","")
     companion object {
 
         const val COLUMN_DEAL_ID = "media_id"
