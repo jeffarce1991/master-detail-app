@@ -38,7 +38,7 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_list)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
-
+        setUpToolbarTitle()
         masterListPresenter.loadMediaList()
     }
 
@@ -46,7 +46,7 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.title = ""
+        supportActionBar!!.title = getString(R.string.app_name)
     }
 
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
