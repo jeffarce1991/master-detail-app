@@ -4,10 +4,10 @@ import dagger.Binds
 import dagger.Module
 
 @Module
-abstract class CountryDetailPresenterModule {
+abstract class MasterDetailPresenterModule {
 
     @Binds
-    abstract fun bindCountryDetailPresenter(
-        defaultCountryDetailPresenter: DefaultMasterDetailPresenter
+    abstract fun bindMasterDetailPresenter(
+        defaultMasterDetailPresenter: DefaultMasterDetailPresenter
     ): MasterDetailPresenter
 }
