@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
+import com.jeff.master.BuildConfig
 import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter
 import com.jeff.master.android.base.extension.longToast
@@ -40,7 +41,6 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
         mainPresenter.getTracks()
     }
 
-Default
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
@@ -77,14 +77,14 @@ Default
     override fun showProgressRemote() {
         progressDialog = show(
             this,
-            "Project420",
+            "Loading...",
             "Loading data remotely...")
     }
 
     override fun showProgressLocal() {
         progressDialog = show(
             this,
-            "Project420",
+            "Loading...",
             "Loading data locally...")
     }
 }
