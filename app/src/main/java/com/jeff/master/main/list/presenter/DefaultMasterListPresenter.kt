@@ -1,4 +1,4 @@
-package com.jeff.master.main.presenter
+package com.jeff.master.main.list.presenter
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
 import com.jeff.master.Constants
@@ -7,7 +7,7 @@ import com.jeff.master.database.usecase.local.loader.PhotoLocalLoader
 import com.jeff.master.database.usecase.local.saver.PhotoLocalSaver
 import com.jeff.master.webservices.exception.NoInternetException
 import com.jeff.master.webservices.internet.RxInternet
-import com.jeff.master.main.view.MainView
+import com.jeff.master.main.list.view.MasterListView
 import com.jeff.master.supplychain.track.MediaLoader
 import com.jeff.master.webservices.api.photos.PhotosApi
 import com.jeff.master.webservices.api.RetrofitClientInstance
@@ -17,31 +17,21 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultMainPresenter @Inject
+class DefaultMasterListPresenter @Inject
 constructor(
     private val internet: RxInternet,
     private val localLoader: PhotoLocalLoader,
     private val localSaver: PhotoLocalSaver,
     private val schedulerUtils: RxSchedulerUtils,
     private val loader: MediaLoader
-) : MvpBasePresenter<MainView>(),
-    MainPresenter {
+) : MvpBasePresenter<MasterListView>(),
+    MasterListPresenter {
 
-    lateinit var view: MainView
+    lateinit var view: MasterListView
 
     lateinit var disposable: Disposable
 
-    private fun getApi(): PhotosApi {
-
-        /*Create handle for the RetrofitInstance interface*/
-        return RetrofitClientInstance.getRxRetrofitInstance(
-            Constants.Gateways.JSONPLACEHOLDER
-        )!!.create(
-            PhotosApi::class.java
-        )
-    }
-
-    override fun getTracks() {
+    override fun loadMediaList() {
         internet.isConnected()
             .andThen(loader.loadAll())
             .compose(schedulerUtils.forSingle())
@@ -59,7 +49,7 @@ constructor(
                 }
 
                 override fun onSubscribe(d: Disposable) {
-                    view.showProgressRemote()
+                    view.showProgress()
                     disposable = d
                 }
 
@@ -70,7 +60,7 @@ constructor(
                     view.hideProgress()
 
                     if (e is NoInternetException) {
-                        //getPhotosFromLocal()
+                        view.showError(e.message!!)
                     } else {
                         dispose()
                     }
@@ -112,7 +102,7 @@ constructor(
             })
     }*/
 
-    override fun attachView(view: MainView) {
+    override fun attachView(view: MasterListView) {
         super.attachView(view)
         this.view = view
     }
