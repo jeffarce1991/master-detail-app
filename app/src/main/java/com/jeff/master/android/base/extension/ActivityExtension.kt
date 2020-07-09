@@ -16,7 +16,9 @@ fun Activity.invokeSimpleDialog(title: String,
                 onApprove.invoke()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
+                finish()
                 dialog.dismiss()
+
             }
             .show()
 }
@@ -47,6 +49,14 @@ fun Activity.invokeSimpleDialog(title: String,
             .setPositiveButton(positiveButtonText) { dialog, which ->
                 dialog.dismiss()
             }
+            .show()
+}
+
+fun Activity.invokeSimpleDialog(title: String,
+                                message: String) {
+    AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
             .show()
 }
 
