@@ -1,24 +1,18 @@
 package com.jeff.master.main.detail.presenter
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
-import com.jeff.covidtracker.database.local.Cases
-import com.jeff.covidtracker.database.local.Country
-import com.jeff.master.main.detail.view.CountryDetailView
-import com.jeff.covidtracker.supplychain.country.detail.CasesLoader
-import com.jeff.covidtracker.supplychain.country.list.CountryLoader
-import com.jeff.covidtracker.utilities.rx.RxSchedulerUtils
+import com.jeff.master.main.detail.view.MasterDetailView
+import com.jeff.master.supplychain.track.MediaLoader
 import com.jeff.master.utilities.rx.RxSchedulerUtils
-import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultCountryDetailPresenter @Inject
+class DefaultMasterDetailPresenter @Inject
 constructor(
-    private val casesLoader: CasesLoader,
+    private val mediaLoader: MediaLoader,
     private val schedulers: RxSchedulerUtils
-): MvpBasePresenter<CountryDetailView>(),
-    CountryDetailPresenter {
+): MvpBasePresenter<MasterDetailView>(),
+    MasterDetailPresenter {
 
 
     lateinit var disposable: Disposable
@@ -51,5 +45,9 @@ constructor(
 
     private fun dispose() {
         if (!disposable.isDisposed) disposable.dispose()
+    }
+
+    override fun loadDetail(id: String) {
+        TODO("Not yet implemented")
     }
 }
