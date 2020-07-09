@@ -14,6 +14,7 @@ import com.jeff.master.android.base.extension.longToast
 import com.jeff.master.database.local.Photo
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterListBinding
+import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.jeff.master.main.list.presenter.MasterListPresenter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     MasterListView {
     private lateinit var adapter: CustomAdapter
 
-    lateinit var mainBinding : ActivityMasterListBinding
+    lateinit var binding : ActivityMasterListBinding
 
     lateinit var photos : List<Photo>
 
@@ -36,9 +37,16 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_list)
-        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
 
         masterListPresenter.loadMediaList()
+    }
+
+
+    private fun setUpToolbarTitle() {
+        setSupportActionBar(binding.toolbar)
+
+        supportActionBar!!.title = ""
     }
 
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
@@ -46,8 +54,8 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         val sortedMediaList = sortByName(mediaList)
         adapter = CustomAdapter(this, sortedMediaList)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@MasterListActivity)
-        mainBinding.customRecyclerView.layoutManager = layoutManager
-        mainBinding.customRecyclerView.adapter = adapter
+        binding.customRecyclerView.layoutManager = layoutManager
+        binding.customRecyclerView.adapter = adapter
     }
 
     private fun sortByName(list: List<Media>): List<Media> {
@@ -60,11 +68,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     }
 
     override fun hideProgress() {
-        mainBinding.progressBar.visibility = GONE
+        binding.progressBar.visibility = GONE
     }
 
     override fun showProgress() {
-        mainBinding.progressBar.visibility = VISIBLE
+        binding.progressBar.visibility = VISIBLE
     }
 
     override fun showLoadingDataFailed() {
