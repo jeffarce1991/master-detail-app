@@ -1,4 +1,4 @@
-package com.jeff.master.main.presenter
+package com.jeff.master.main.list.presenter
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
 import com.jeff.master.Constants
@@ -7,7 +7,7 @@ import com.jeff.master.database.usecase.local.loader.PhotoLocalLoader
 import com.jeff.master.database.usecase.local.saver.PhotoLocalSaver
 import com.jeff.master.webservices.exception.NoInternetException
 import com.jeff.master.webservices.internet.RxInternet
-import com.jeff.master.main.view.MasterListView
+import com.jeff.master.main.list.view.MasterListView
 import com.jeff.master.supplychain.track.MediaLoader
 import com.jeff.master.webservices.api.photos.PhotosApi
 import com.jeff.master.webservices.api.RetrofitClientInstance
@@ -31,17 +31,7 @@ constructor(
 
     lateinit var disposable: Disposable
 
-    private fun getApi(): PhotosApi {
-
-        /*Create handle for the RetrofitInstance interface*/
-        return RetrofitClientInstance.getRxRetrofitInstance(
-            Constants.Gateways.JSONPLACEHOLDER
-        )!!.create(
-            PhotosApi::class.java
-        )
-    }
-
-    override fun getTracks() {
+    override fun loadMediaList() {
         internet.isConnected()
             .andThen(loader.loadAll())
             .compose(schedulerUtils.forSingle())
@@ -59,7 +49,7 @@ constructor(
                 }
 
                 override fun onSubscribe(d: Disposable) {
-                    view.showProgressRemote()
+                    view.showProgress()
                     disposable = d
                 }
 
@@ -70,7 +60,7 @@ constructor(
                     view.hideProgress()
 
                     if (e is NoInternetException) {
-                        //getPhotosFromLocal()
+                        view.showError(e.message!!)
                     } else {
                         dispose()
                     }

@@ -1,28 +1,29 @@
-package com.jeff.master.main.view
+package com.jeff.master.main.list.view
 
-import android.app.ProgressDialog
-import android.app.ProgressDialog.*
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter
+import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
 import com.jeff.master.database.local.Photo
 import com.jeff.master.database.local.Media
-import com.jeff.master.databinding.ActivityMainBinding
-import com.jeff.master.main.presenter.MasterListPresenter
+import com.jeff.master.databinding.ActivityMasterListBinding
+import com.jeff.master.main.list.presenter.MasterListPresenter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 
-class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(), MasterListView {
+class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
+    MasterListView {
     private lateinit var adapter: CustomAdapter
-    private lateinit var progressDialog: ProgressDialog
 
-    lateinit var mainBinding : ActivityMainBinding
+    lateinit var mainBinding : ActivityMasterListBinding
 
     lateinit var photos : List<Photo>
 
@@ -34,10 +35,10 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(), M
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_master_list)
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
 
-        masterListPresenter.getTracks()
+        masterListPresenter.loadMediaList()
     }
 
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
@@ -59,12 +60,16 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(), M
     }
 
     override fun hideProgress() {
-        progressDialog.dismiss()
+        mainBinding.progressBar.visibility = GONE
+    }
+
+    override fun showProgress() {
+        mainBinding.progressBar.visibility = VISIBLE
     }
 
     override fun showLoadingDataFailed() {
         longToast("Loading data failed")
-        /*invokeSimpleDialog("Project420",
+        /*invokeSimpleDialog("",
             "OK",
             "List is empty or null.")*/
     }
@@ -73,17 +78,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(), M
         longToast(message)
     }
 
-    override fun showProgressRemote() {
-        progressDialog = show(
-            this,
-            "Loading...",
-            "Loading data remotely...")
+    override fun showError(message: String) {
+        invokeSimpleDialog("Error!",
+            "Retry",
+            message
+        ) { masterListPresenter.loadMediaList() }
     }
 
-    override fun showProgressLocal() {
-        progressDialog = show(
-            this,
-            "Loading...",
-            "Loading data locally...")
-    }
 }
