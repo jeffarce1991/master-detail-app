@@ -6,4 +6,5 @@ import io.reactivex.Single
 interface MediaLoader {
 
     fun loadAll(): Single<List<Media>>
+    fun loadById(id: Int): Single<Media>
 }

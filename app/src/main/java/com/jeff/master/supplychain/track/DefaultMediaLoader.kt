@@ -24,4 +24,14 @@ constructor(private val remoteLoader: MediaRemoteLoader,
             .flatMap { tracks -> Single.just(tracks) }
     }
 
+    override fun loadById(id: Int): Single<Media> {
+        return rxInternet.isConnected()
+            .andThen(remoteLoader.loadById(id))
+            .flatMapObservable { list -> Observable.fromIterable(list.results) }
+            .flatMap(MediaDtoToMediaMapper())
+            .toList()
+            //.flatMap { photos -> Single.fromObservable(localSaver.saveAll(photos)) }
+            .flatMap { tracks -> Single.just(tracks[0]) }
+    }
+
 }
