@@ -24,6 +24,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"/>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/country_date_layout"
@@ -33,14 +42,14 @@
             app:layout_constraintLeft_toRightOf="parent">
 
             <TextView
-                android:id="@+id/country_date"
+                style="@style/TextAppearance.MaterialComponents.Body1"
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/screen_margin_xs"
                 android:paddingStart="@dimen/screen_margin"
                 android:paddingEnd="@dimen/screen_margin"
-                android:alpha=".5"
-                android:text="As of .."
+                android:text="DESCRIPTION"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
