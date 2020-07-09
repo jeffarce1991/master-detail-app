@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
+import com.jeff.master.BuildConfig
 import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter
 import com.jeff.master.android.base.extension.longToast
@@ -76,14 +77,14 @@ class MainActivity : MvpActivity<MainView, MainPresenter>(), MainView {
     override fun showProgressRemote() {
         progressDialog = show(
             this,
-            "Project420",
+            "Loading...",
             "Loading data remotely...")
     }
 
     override fun showProgressLocal() {
         progressDialog = show(
             this,
-            "Project420",
+            "Loading...",
             "Loading data locally...")
     }
 }
