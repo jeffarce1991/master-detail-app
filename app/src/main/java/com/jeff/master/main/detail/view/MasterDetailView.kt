@@ -3,7 +3,7 @@ package com.jeff.master.main.detail.view
 import com.hannesdorfmann.mosby.mvp.MvpView
 import com.jeff.master.database.local.Media
 
-interface CountryDetailView: MvpView {
+interface MasterDetailView: MvpView {
 
     fun setDetails(media: Media)
     fun showProgress()

@@ -7,41 +7,37 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.hannesdorfmann.mosby.mvp.MvpActivity
-import com.jeff.covidtracker.R
-import com.jeff.covidtracker.database.local.Cases
-import com.jeff.covidtracker.databinding.ActivityCountryDetailBinding
-import com.jeff.master.main.detail.presenter.DefaultCountryDetailPresenter
-import com.jeff.covidtracker.utilities.extensions.toDisplay
+import com.jeff.master.main.detail.presenter.DefaultMasterDetailPresenter
 import com.jeff.master.R
+import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityCountryDetailBinding
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class CountryDetailActivity : MvpActivity<CountryDetailView, DefaultCountryDetailPresenter>(),
-    CountryDetailView {
+class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPresenter>(),
+    MasterDetailView {
 
     @Inject
-    internal lateinit var countryDetailPresenter: DefaultCountryDetailPresenter
+    internal lateinit var masterDetailPresenter: DefaultMasterDetailPresenter
 
     private lateinit var progressDialog: ProgressDialog
 
     private lateinit var binding : ActivityCountryDetailBinding
 
     companion object {
-        private var EXTRA_COUNTRY_NAME = "EXTRA_COUNTRY_NAME"
-        private var EXTRA_COUNTRY_CODE = "EXTRA_COUNTRY_CODE"
-        private var EXTRA_COUNTRY_ISO2 = "EXTRA_COUNTRY_ISO2"
+        private var EXTRA_ID = "EXTRA_ID"
+        private var EXTRA_TITLE = "EXTRA_TITLE"
 
         fun getStartIntent(
             context: Context,
-            country : String,
-            countryCode : String,
-            iso2 : String
+            id : Int,
+            title : String
+
+
         ): Intent {
-            return Intent(context, CountryDetailActivity::class.java)
-                .putExtra(EXTRA_COUNTRY_NAME, country)
-                .putExtra(EXTRA_COUNTRY_CODE, countryCode)
-                .putExtra(EXTRA_COUNTRY_ISO2, iso2)
+            return Intent(context, MasterDetailActivity::class.java)
+                .putExtra(EXTRA_ID, id)
+                .putExtra(EXTRA_TITLE, title)
         }
     }
 
@@ -54,7 +50,7 @@ class CountryDetailActivity : MvpActivity<CountryDetailView, DefaultCountryDetai
         binding = DataBindingUtil.setContentView(this, R.layout.activity_country_detail)
 
         setUpToolbarTitle()
-        countryDetailPresenter.loadCases(intent.getStringExtra(EXTRA_COUNTRY_CODE))
+        //countryDetailPresenter.loadCases(intent.getStringExtra(EXTRA_COUNTRY_CODE))
 
 
     }
@@ -62,12 +58,13 @@ class CountryDetailActivity : MvpActivity<CountryDetailView, DefaultCountryDetai
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.countryDetailToolbar)
 
-        supportActionBar!!.title = intent.getStringExtra(EXTRA_COUNTRY_NAME).capitalize()
+        val extras = intent.extras
+        supportActionBar!!.title = extras!!.getString(EXTRA_TITLE)
         binding.countryDetailToolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
-    override fun createPresenter(): DefaultCountryDetailPresenter {
-        return countryDetailPresenter
+    override fun createPresenter(): DefaultMasterDetailPresenter {
+        return masterDetailPresenter
     }
 
     /*override fun setCases(cases: Cases) {
@@ -92,6 +89,10 @@ class CountryDetailActivity : MvpActivity<CountryDetailView, DefaultCountryDetai
 
     override fun hideProgress() {
         progressDialog.dismiss()
+    }
+
+    override fun setDetails(media: Media) {
+        TODO("Not yet implemented")
     }
 
     override fun showProgress() {
