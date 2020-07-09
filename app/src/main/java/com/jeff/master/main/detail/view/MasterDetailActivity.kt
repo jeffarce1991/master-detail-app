@@ -50,10 +50,12 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master_detail)
 
         setUpToolbarTitle()
-        //countryDetailPresenter.loadCases(intent.getStringExtra(EXTRA_COUNTRY_CODE))
+        masterDetailPresenter.loadDetails(getId())
 
 
     }
+
+    fun getId(): Int = intent.getIntExtra(EXTRA_ID,-1)
 
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.countryDetailToolbar)
@@ -95,11 +97,15 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
         TODO("Not yet implemented")
     }
 
-    override fun showProgress() {
-        progressDialog = show(
-            this,
-            getString(R.string.app_name),
-            "Loading Cases...")
+    override fun showError(message: String) {
+        invokeSimpleDialog("Error!",
+            "Retry",
+            message
+        ) { masterDetailPresenter.loadDetails(getId()) }
+    }
+
+    override fun setDetails(media: Media) {
+        binding.description.text = media.longDescription
     }
 
 }
