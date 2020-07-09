@@ -15,7 +15,7 @@ import com.jeff.master.database.room.dao.PhotoDao;
                 Photo.class,
                 Media.class
         },
-        version = 6,
+        version = 7,
         exportSchema = false
 )
 
