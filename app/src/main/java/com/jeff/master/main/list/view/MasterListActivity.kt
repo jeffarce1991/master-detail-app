@@ -75,13 +75,6 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         binding.progressBar.visibility = VISIBLE
     }
 
-    override fun showLoadingDataFailed() {
-        longToast("Loading data failed")
-        /*invokeSimpleDialog("",
-            "OK",
-            "List is empty or null.")*/
-    }
-
     override fun showToast(message: String) {
         longToast(message)
     }

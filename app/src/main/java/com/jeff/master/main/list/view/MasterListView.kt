@@ -7,7 +7,6 @@ interface MasterListView : MvpView {
      fun hideProgress()
      fun showProgress()
 
-     fun showLoadingDataFailed()
      fun showToast(message: String)
      fun showError(message: String)
      fun generateDataList(track: List<Media>)
