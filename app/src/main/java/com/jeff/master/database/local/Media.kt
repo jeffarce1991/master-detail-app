@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey
 data class Media constructor(
     @ColumnInfo(name = "id")
     @PrimaryKey var id: Int,
+    @ColumnInfo(name = "kind")
+                 var kind: String,
     @ColumnInfo(name = "track_name")
                  var trackName: String,
     @ColumnInfo(name = "artist_name")
@@ -27,7 +29,7 @@ data class Media constructor(
     @ColumnInfo(name = "long_description")
                  var longDescription: String? = null) {
 
-    constructor(): this(0, "", "","", "", 0.0,
+    constructor(): this(0, "","", "","", "", 0.0,
         0.0, "", "","")
     companion object {
 

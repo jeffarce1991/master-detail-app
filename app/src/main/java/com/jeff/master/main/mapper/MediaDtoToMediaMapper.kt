@@ -16,10 +16,12 @@ class MediaDtoToMediaMapper : Function<MediaDto, Observable<Media>> {
             val media = Media()
             if (dto.wrapperType == TRACK) {
                 media.id = dto.trackId
+                media.kind = dto.kind
                 media.trackName = dto.trackName!!
                 media.artistName = dto.artistName
             } else if (dto.wrapperType == AUDIOBOOK) {
                 media.id = dto.collectionId
+                media.kind = "audiobook"
                 media.trackName = dto.collectionName
                 media.artistName = dto.artistName
                 media.shortDescription = dto.description

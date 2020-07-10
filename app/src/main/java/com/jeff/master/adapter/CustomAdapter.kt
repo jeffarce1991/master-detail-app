@@ -60,6 +60,7 @@ internal class CustomAdapter(
             val intent = MasterDetailActivity.getStartIntent(
                 context,
                 selectedMedia.id,
+                selectedMedia.kind,
                 selectedMedia.trackName
             )
             context.startActivity(intent)
