@@ -30,6 +30,7 @@ class MediaDtoToMediaMapper : Function<MediaDto, Observable<Media>> {
 
             media.artWorkUrl = dto.artworkUrl100
             media.currency = dto.currency
+            media.country = dto.country
             media.price = dto.trackPrice
             media.genre = dto.primaryGenreName
 
@@ -37,9 +38,6 @@ class MediaDtoToMediaMapper : Function<MediaDto, Observable<Media>> {
                 media.hdPrice = dto.trackHdPrice
                 media.shortDescription = dto.shortDescription
                 media.longDescription = dto.longDescription
-            } else {
-                //media.shortDescription = ""
-                //media.longDescription = ""
             }
 
             media

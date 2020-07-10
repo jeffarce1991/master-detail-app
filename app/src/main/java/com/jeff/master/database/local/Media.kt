@@ -16,6 +16,8 @@ data class Media constructor(
                  var artistName: String,
     @ColumnInfo(name = "art_work")
                  var artWorkUrl: String,
+    @ColumnInfo(name = "country")
+                 var country: String,
     @ColumnInfo(name = "currency")
                  var currency: String,
     @ColumnInfo(name = "price")
@@ -29,8 +31,20 @@ data class Media constructor(
     @ColumnInfo(name = "long_description")
                  var longDescription: String? = null) {
 
-    constructor(): this(0, "","", "","", "", 0.0,
-        0.0, "", "","")
+    constructor(): this(
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0.0,
+        0.0,
+        "",
+        "",
+        ""
+    )
     companion object {
 
         const val COLUMN_DEAL_ID = "media_id"

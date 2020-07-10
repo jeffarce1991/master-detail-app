@@ -12,7 +12,7 @@ import com.jeff.master.database.room.dao.MediaDao;
         entities = {
                 Media.class
         },
-        version = 9,
+        version = 11,
         exportSchema = false
 )
 
