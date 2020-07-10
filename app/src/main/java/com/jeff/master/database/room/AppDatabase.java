@@ -4,26 +4,22 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.jeff.master.database.local.Photo;
 import com.jeff.master.database.local.Media;
 import com.jeff.master.database.room.converter.MediaConverter;
-import com.jeff.master.database.room.converter.PhotoConverter;
-import com.jeff.master.database.room.dao.PhotoDao;
+import com.jeff.master.database.room.dao.MediaDao;
 
 @Database(
         entities = {
-                Photo.class,
                 Media.class
         },
-        version = 6,
+        version = 11,
         exportSchema = false
 )
 
 @TypeConverters(
         {
-                PhotoConverter.class,
                 MediaConverter.class
         })
 public abstract class AppDatabase extends RoomDatabase {
-        public abstract PhotoDao photoDao();
+        public abstract MediaDao mediaDao();
 }
