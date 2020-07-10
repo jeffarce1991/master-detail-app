@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.jeff.master.R
-import com.jeff.master.adapter.CustomAdapter
+import com.jeff.master.adapter.MediaListAdapter
 import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
 import com.jeff.master.database.local.Media
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     MasterListView {
-    private lateinit var adapter: CustomAdapter
+    private lateinit var adapter: MediaListAdapter
 
     lateinit var binding : ActivityMasterListBinding
 
@@ -48,7 +48,7 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
-        adapter = CustomAdapter(this, sortedMediaList)
+        adapter = MediaListAdapter(this, sortedMediaList)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@MasterListActivity)
         binding.customRecyclerView.layoutManager = layoutManager
         binding.customRecyclerView.adapter = adapter

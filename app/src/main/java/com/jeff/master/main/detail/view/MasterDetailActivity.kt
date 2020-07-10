@@ -117,10 +117,8 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
         setTitle(media.trackName)
         binding.artist.text = media.artistName
         binding.genre.text = media.genre
-        val local = Locale("en", "US")
-        val currency: Currency = Currency.getInstance(media.currency)
-        currency.getSymbol(local)
-        binding.price.text = currency.getSymbol(local) + media.price
+        binding.price.text =
+            String.format(getCurrencySymbol(media.country, media.currency) + media.price)
 
         setImage(this, media.artWorkUrl, binding.coverImage)
 
@@ -138,11 +136,18 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
 
     }
 
+    private fun getCurrencySymbol(country: String, currency: String): String {
+        return Currency.getInstance(currency)
+            .getSymbol(Locale("en", country))
+    }
+
+
     private fun setTitle(title: String) {
         if (title.length >= 24) {
-            binding.title.text = title.substring(0, 18)+ "...";
+            binding.title.text = String.format("${title.substring(0, 22).trim()}...")
         } else {
             binding.title.text = title;
         }
     }
+
 }

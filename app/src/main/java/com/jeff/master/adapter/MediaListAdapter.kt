@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.jeff.master.R
-import com.jeff.master.adapter.CustomAdapter.CustomViewHolder
+import com.jeff.master.adapter.MediaListAdapter.CustomViewHolder
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.MediaItemBinding
 import com.jeff.master.main.detail.view.MasterDetailActivity
@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso
 import java.util.*
 import kotlin.Comparator
 
-internal class CustomAdapter(
+internal class MediaListAdapter(
     private val context: Context,
     private val dataList: List<Media>
 ) : RecyclerView.Adapter<CustomViewHolder>() {
@@ -45,8 +45,10 @@ internal class CustomAdapter(
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         setTrackName(holder, position)
-        holder.txtGenre.text = dataList[position].genre
-        holder.txtPrice.text = dataList[position].currency + dataList[position].price.toString()
+        val media = dataList[position]
+        holder.txtGenre.text = media.genre
+        holder.txtPrice.text =
+            String.format(getCurrencySymbol(media.country, media.currency) + media.price)
         val builder = Picasso.Builder(context)
         builder.downloader(OkHttp3Downloader(context))
         builder.build().load(dataList[position].artWorkUrl)
@@ -66,27 +68,19 @@ internal class CustomAdapter(
         }
     }
 
+
+    private fun getCurrencySymbol(country: String, currency: String): String {
+        return Currency.getInstance(currency)
+            .getSymbol(Locale("en", country))
+    }
+
     private fun setTrackName(holder: CustomViewHolder, position: Int) {
         val data = dataList[position].trackName
-        if (data.length >= 24) {
-            holder.txtTitle.text = data.substring(0, 24)+ "...";
+        if (data.length >= 32) {
+            holder.txtTitle.text = String.format("${data.substring(0, 30)}...")
         } else {
             holder.txtTitle.text = data;
         }
-    }
-
-    fun sortAlphabetically() {
-        Collections.sort(dataList, Comparator<Media> { obj1, obj2 ->
-            // ## Ascending order
-            obj2.trackName
-                .compareTo(obj1.trackName) // To compare string values
-
-            // return Integer.valueOf(obj1.empId).compareTo(Integer.valueOf(obj2.empId)); // To compare integer values
-
-            // ## Descending order
-            // return obj2.firstName.compareToIgnoreCase(obj1.firstName); // To compare string values
-            // return Integer.valueOf(obj2.empId).compareTo(Integer.valueOf(obj1.empId)); // To compare integer values
-        })
     }
 
     override fun getItemCount(): Int {
