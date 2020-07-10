@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.jeff.master.R
-import com.jeff.master.adapter.CustomAdapter
+import com.jeff.master.adapter.MediaListAdapter
 import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
-import com.jeff.master.database.local.Photo
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterListBinding
 import com.jeff.master.main.list.presenter.MasterListPresenter
@@ -21,11 +20,9 @@ import javax.inject.Inject
 
 class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     MasterListView {
-    private lateinit var adapter: CustomAdapter
+    private lateinit var adapter: MediaListAdapter
 
-    lateinit var mainBinding : ActivityMasterListBinding
-
-    lateinit var photos : List<Photo>
+    lateinit var binding : ActivityMasterListBinding
 
 
     @Inject
@@ -36,18 +33,25 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_master_list)
-        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
+        setUpToolbarTitle()
         masterListPresenter.loadMediaList()
+    }
+
+
+    private fun setUpToolbarTitle() {
+        setSupportActionBar(binding.toolbar)
+
+        supportActionBar!!.title = getString(R.string.app_name)
     }
 
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
-        adapter = CustomAdapter(this, sortedMediaList)
+        adapter = MediaListAdapter(this, sortedMediaList)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@MasterListActivity)
-        mainBinding.customRecyclerView.layoutManager = layoutManager
-        mainBinding.customRecyclerView.adapter = adapter
+        binding.customRecyclerView.layoutManager = layoutManager
+        binding.customRecyclerView.adapter = adapter
     }
 
     private fun sortByName(list: List<Media>): List<Media> {
@@ -60,18 +64,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     }
 
     override fun hideProgress() {
-        mainBinding.progressBar.visibility = GONE
+        binding.progressBar.visibility = GONE
     }
 
     override fun showProgress() {
-        mainBinding.progressBar.visibility = VISIBLE
-    }
-
-    override fun showLoadingDataFailed() {
-        longToast("Loading data failed")
-        /*invokeSimpleDialog("",
-            "OK",
-            "List is empty or null.")*/
+        binding.progressBar.visibility = VISIBLE
     }
 
     override fun showToast(message: String) {

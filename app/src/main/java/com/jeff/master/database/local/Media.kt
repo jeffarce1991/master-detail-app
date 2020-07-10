@@ -8,12 +8,16 @@ import androidx.room.PrimaryKey
 data class Media constructor(
     @ColumnInfo(name = "id")
     @PrimaryKey var id: Int,
+    @ColumnInfo(name = "kind")
+                 var kind: String,
     @ColumnInfo(name = "track_name")
                  var trackName: String,
     @ColumnInfo(name = "artist_name")
                  var artistName: String,
     @ColumnInfo(name = "art_work")
                  var artWorkUrl: String,
+    @ColumnInfo(name = "country")
+                 var country: String,
     @ColumnInfo(name = "currency")
                  var currency: String,
     @ColumnInfo(name = "price")
@@ -21,9 +25,26 @@ data class Media constructor(
     @ColumnInfo(name = "hd_price")
                  var hdPrice: Double? = null,
     @ColumnInfo(name = "genre")
-                 var genre: String) {
+                 var genre: String,
+    @ColumnInfo(name = "short_description")
+                 var shortDescription: String? = null,
+    @ColumnInfo(name = "long_description")
+                 var longDescription: String? = null) {
 
-    constructor(): this(0, "", "","", "", 0.0, 0.0, "")
+    constructor(): this(
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0.0,
+        0.0,
+        "",
+        "",
+        ""
+    )
     companion object {
 
         const val COLUMN_DEAL_ID = "media_id"

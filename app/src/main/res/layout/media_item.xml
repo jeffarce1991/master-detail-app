@@ -8,8 +8,12 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/coverImage"
@@ -50,15 +54,14 @@
 
         <TextView
             android:id="@+id/price"
-            style="@style/TextAppearance.MaterialComponents.Caption"
+            style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/screen_margin"
             android:layout_marginStart="@dimen/screen_margin"
             android:text="0.0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/genre" />
 
         <View
             android:layout_width="match_parent"

@@ -11,26 +11,33 @@ import io.reactivex.functions.Function
 class MediaDtoToMediaMapper : Function<MediaDto, Observable<Media>> {
 
     @Throws(Exception::class)
-    override fun apply(mediaDto: MediaDto): Observable<Media> {
+    override fun apply(dto: MediaDto): Observable<Media> {
         return Observable.fromCallable {
             val media = Media()
-            if (mediaDto.wrapperType == TRACK) {
-                media.id = mediaDto.trackId
-                media.trackName = mediaDto.trackName!!
-                media.artistName = mediaDto.artistName
-            } else if (mediaDto.wrapperType == AUDIOBOOK) {
-                media.id = mediaDto.artistId
-                media.trackName = mediaDto.collectionName
-                media.artistName = mediaDto.artistName
+            if (dto.wrapperType == TRACK) {
+                media.id = dto.trackId
+                media.kind = dto.kind
+                media.trackName = dto.trackName!!
+                media.artistName = dto.artistName
+            } else if (dto.wrapperType == AUDIOBOOK) {
+                media.id = dto.collectionId
+                media.kind = "audiobook"
+                media.trackName = dto.collectionName
+                media.artistName = dto.artistName
+                media.shortDescription = dto.description
+                media.longDescription = dto.description
             }
 
-            media.artWorkUrl = mediaDto.artworkUrl100
-            media.currency = mediaDto.currency
-            media.price = mediaDto.trackPrice
-            media.genre = mediaDto.primaryGenreName
+            media.artWorkUrl = dto.artworkUrl100
+            media.currency = dto.currency
+            media.country = dto.country
+            media.price = dto.trackPrice
+            media.genre = dto.primaryGenreName
 
-            if (mediaDto.kind == FEATURE_MOVIE) {
-                media.hdPrice = mediaDto.trackHdPrice
+            if (dto.kind == FEATURE_MOVIE) {
+                media.hdPrice = dto.trackHdPrice
+                media.shortDescription = dto.shortDescription
+                media.longDescription = dto.longDescription
             }
 
             media
