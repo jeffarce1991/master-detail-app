@@ -54,8 +54,7 @@ constructor(
     }
 
     override fun loadDetails(id: Int) {
-        internet.isConnected()
-            .andThen(loader.loadById(id))
+        loader.loadByIdLocally(id)
             .compose(schedulers.forSingle())
             .subscribe(object : SingleObserver<Media> {
                 override fun onSuccess(t: Media) {

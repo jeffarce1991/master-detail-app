@@ -1,21 +1,23 @@
 package com.jeff.master.main.detail.view
 
-import android.app.ProgressDialog
-import android.app.ProgressDialog.show
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.hannesdorfmann.mosby.mvp.MvpActivity
-import com.jeff.master.main.detail.presenter.DefaultMasterDetailPresenter
+import com.jakewharton.picasso.OkHttp3Downloader
 import com.jeff.master.R
 import com.jeff.master.android.base.extension.invokeSimpleDialog
+import com.jeff.master.android.base.extension.shortToast
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterDetailBinding
-
-
+import com.jeff.master.main.detail.presenter.DefaultMasterDetailPresenter
+import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
+import java.util.*
 import javax.inject.Inject
 
 class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPresenter>(),
@@ -24,23 +26,24 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
     @Inject
     internal lateinit var masterDetailPresenter: DefaultMasterDetailPresenter
 
-    private lateinit var progressDialog: ProgressDialog
-
     private lateinit var binding : ActivityMasterDetailBinding
 
     companion object {
         private var EXTRA_ID = "EXTRA_ID"
+        private var EXTRA_KIND = "EXTRA_KIND"
         private var EXTRA_TITLE = "EXTRA_TITLE"
 
         fun getStartIntent(
             context: Context,
             id : Int,
+            kind : String,
             title : String
 
 
         ): Intent {
             return Intent(context, MasterDetailActivity::class.java)
                 .putExtra(EXTRA_ID, id)
+                .putExtra(EXTRA_KIND, kind)
                 .putExtra(EXTRA_TITLE, title)
         }
     }
@@ -62,11 +65,11 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
     fun getId(): Int = intent.getIntExtra(EXTRA_ID,-1)
 
     private fun setUpToolbarTitle() {
-        setSupportActionBar(binding.countryDetailToolbar)
+        setSupportActionBar(binding.toolbar)
 
         val extras = intent.extras
-        supportActionBar!!.title = extras!!.getString(EXTRA_TITLE)
-        binding.countryDetailToolbar.setNavigationOnClickListener { onBackPressed() }
+        //supportActionBar!!.title = extras!!.getString(EXTRA_TITLE)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
 
@@ -111,6 +114,35 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
 
     override fun setDetails(media: Media) {
         binding.description.text = media.longDescription
+        setTitle(media.trackName)
+        binding.artist.text = media.artistName
+        binding.genre.text = media.genre
+        val local = Locale("en", "US")
+        val currency: Currency = Currency.getInstance(media.currency)
+        currency.getSymbol(local)
+        binding.price.text = currency.getSymbol(local) + media.price
+
+        setImage(this, media.artWorkUrl, binding.coverImage)
+
+        binding.title.setOnClickListener { shortToast(media.trackName) }
     }
 
+    private fun setImage(context: Context, url: String, imageView: ImageView) {
+
+        val builder = Picasso.Builder(context)
+        builder.downloader(OkHttp3Downloader(context))
+        builder.build().load(url)
+            .placeholder(R.drawable.ic_placeholder)
+            .error(R.drawable.ic_placeholder)
+            .into(imageView)
+
+    }
+
+    private fun setTitle(title: String) {
+        if (title.length >= 24) {
+            binding.title.text = title.substring(0, 18)+ "...";
+        } else {
+            binding.title.text = title;
+        }
+    }
 }
