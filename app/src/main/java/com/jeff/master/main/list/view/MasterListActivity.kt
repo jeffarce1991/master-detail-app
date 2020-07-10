@@ -11,10 +11,8 @@ import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter
 import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
-import com.jeff.master.database.local.Photo
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterListBinding
-import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.jeff.master.main.list.presenter.MasterListPresenter
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -25,8 +23,6 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     private lateinit var adapter: CustomAdapter
 
     lateinit var binding : ActivityMasterListBinding
-
-    lateinit var photos : List<Photo>
 
 
     @Inject

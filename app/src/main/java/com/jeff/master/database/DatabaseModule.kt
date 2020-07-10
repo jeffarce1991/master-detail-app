@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.jeff.master.R
 import com.jeff.master.database.room.AppDatabase
 import com.jeff.master.database.room.dao.MediaDao
-import com.jeff.master.database.room.dao.PhotoDao
 import com.jeff.master.database.usecase.local.LocalUseCaseModule
 import dagger.Module
 import dagger.Provides
@@ -22,12 +21,6 @@ class DatabaseModule {
             application.getString(R.string.db_name))
             .fallbackToDestructiveMigration()
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun providePhotoDao(appDatabase: AppDatabase): PhotoDao {
-        return appDatabase.photoDao()
     }
 
     @Provides

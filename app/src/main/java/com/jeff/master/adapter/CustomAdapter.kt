@@ -13,7 +13,7 @@ import com.jakewharton.picasso.OkHttp3Downloader
 import com.jeff.master.R
 import com.jeff.master.adapter.CustomAdapter.CustomViewHolder
 import com.jeff.master.database.local.Media
-import com.jeff.master.databinding.CustomRowBinding
+import com.jeff.master.databinding.MediaItemBinding
 import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.squareup.picasso.Picasso
 import java.util.*
@@ -24,7 +24,7 @@ internal class CustomAdapter(
     private val dataList: List<Media>
 ) : RecyclerView.Adapter<CustomViewHolder>() {
 
-    internal inner class CustomViewHolder(binding: CustomRowBinding) :
+    internal inner class CustomViewHolder(binding: MediaItemBinding) :
         ViewHolder(binding.root) {
         var item: ConstraintLayout = binding.item
         var txtTitle: TextView = binding.title
@@ -35,7 +35,7 @@ internal class CustomAdapter(
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): CustomViewHolder {
-        val binding = DataBindingUtil.inflate<CustomRowBinding>(LayoutInflater.from(p0.context),
+        val binding = DataBindingUtil.inflate<MediaItemBinding>(LayoutInflater.from(p0.context),
             R.layout.media_item,
             p0,
             false)

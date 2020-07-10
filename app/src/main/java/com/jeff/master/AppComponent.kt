@@ -4,7 +4,7 @@ import android.app.Application
 import com.jeff.master.database.DatabaseModule
 import com.jeff.master.webservices.internet.RxInternetModule
 import com.jeff.master.main.MainModule
-import com.jeff.master.supplychain.track.PhotoUseCaseModule
+import com.jeff.master.supplychain.media.MediaUseCaseModule
 import com.jeff.master.utilities.UtilityModule
 import com.jeff.master.webservices.api.ApiModule
 import com.jeff.master.webservices.usecase.WebServiceUseCaseModule
@@ -13,7 +13,7 @@ import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-@Component(modules = [AndroidSupportInjectionModule::class,
+@Component(modules = [
     AndroidSupportInjectionModule::class,
     MainModule::class,
     AppModule::class,
@@ -22,7 +22,7 @@ import javax.inject.Singleton
     DatabaseModule::class,
     ApiModule::class,
     WebServiceUseCaseModule::class,
-    PhotoUseCaseModule::class])
+    MediaUseCaseModule::class])
 @Singleton
 interface AppComponent {
 

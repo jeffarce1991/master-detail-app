@@ -3,7 +3,7 @@ package com.jeff.master.main.detail.presenter
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
 import com.jeff.master.database.local.Media
 import com.jeff.master.main.detail.view.MasterDetailView
-import com.jeff.master.supplychain.track.MediaLoader
+import com.jeff.master.supplychain.media.MediaLoader
 import com.jeff.master.utilities.rx.RxSchedulerUtils
 import com.jeff.master.webservices.exception.NoInternetException
 import com.jeff.master.webservices.internet.RxInternet
