@@ -16,7 +16,6 @@ import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.CustomRowBinding
 import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.squareup.picasso.Picasso
-import timber.log.Timber
 import java.util.*
 import kotlin.Comparator
 
@@ -37,7 +36,7 @@ internal class CustomAdapter(
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): CustomViewHolder {
         val binding = DataBindingUtil.inflate<CustomRowBinding>(LayoutInflater.from(p0.context),
-            R.layout.custom_row,
+            R.layout.media_item,
             p0,
             false)
         //sortAlphabetically()
