@@ -132,6 +132,10 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@MasterListActivity)
         binding.customRecyclerView.layoutManager = layoutManager
         binding.customRecyclerView.adapter = adapter
+
+        setSearchQueryListener(sortedMediaList)
+    }
+
     }
 
     private fun sortByName(list: List<Media>): List<Media> {
