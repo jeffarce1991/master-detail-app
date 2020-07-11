@@ -62,13 +62,14 @@ class MasterDetailActivity : MvpActivity<MasterDetailView, DefaultMasterDetailPr
 
     }
 
-    fun getId(): Int = intent.getIntExtra(EXTRA_ID,-1)
+    private fun getId(): Int = intent.getIntExtra(EXTRA_ID,-1)
 
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.toolbar)
 
         val extras = intent.extras
-        //supportActionBar!!.title = extras!!.getString(EXTRA_TITLE)
+        //supportActionBar!!.title = extras!!.getInt(EXTRA_ID).toString()
+        supportActionBar!!.title = "Details"
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
