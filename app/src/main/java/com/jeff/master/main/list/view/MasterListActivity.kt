@@ -77,9 +77,25 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
 
     override fun showError(message: String) {
         invokeSimpleDialog("Error!",
-            "Retry",
+            "OK",
             message
-        ) { masterListPresenter.loadMediaList() }
+        )
+    }
+
+    override fun showEmptyListError() {
+        invokeSimpleDialog("Error!",
+            "Load Remotely",
+            "Close",
+            "No Data Saved Locally"
+        ) { masterListPresenter.loadMediaListRemotely() }
+    }
+
+    override fun showNoInternetError() {
+        invokeSimpleDialog("Error!",
+            "Retry",
+            "Close",
+            "No Internet Connection"
+        ) { masterListPresenter.loadMediaListRemotely() }
     }
 
 }
