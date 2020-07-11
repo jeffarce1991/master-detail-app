@@ -65,6 +65,14 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        initializeSearchView(menu)
+
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.about ->         //add the function to perform here
@@ -78,6 +86,27 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
                 finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initializeSearchView(menu: Menu?) {
+        val searchItem: MenuItem = menu!!.findItem(R.id.action_search)
+        searchView =
+            getActionView(searchItem) as SearchView
+        searchView.setOnCloseListener { true }
+
+        val searchPlate =
+            searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+        searchPlate.hint = "Search by title, artist, kind, genre"
+        searchPlate.setHintTextColor(resources.getColor(R.color.light_gray))
+        searchPlate.setTextColor(resources.getColor(R.color.white))
+
+        val searchPlateView: View = searchView.findViewById(androidx.appcompat.R.id.search_plate)
+        searchPlateView.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                android.R.color.transparent
+            )
+        )
     }
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
