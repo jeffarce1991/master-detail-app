@@ -1,33 +1,41 @@
 package com.jeff.master.main.list.view
 
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuItemCompat.getActionView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
+import com.jeff.master.BuildConfig
 import com.jeff.master.R
 import com.jeff.master.adapter.MediaListAdapter
 import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
+import com.jeff.master.android.base.extension.shortToast
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterListBinding
 import com.jeff.master.main.list.presenter.MasterListPresenter
 import dagger.android.AndroidInjection
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     MasterListView {
-    private lateinit var adapter: MediaListAdapter
-
-    lateinit var binding : ActivityMasterListBinding
-
 
     @Inject
     internal lateinit var masterListPresenter: MasterListPresenter
 
+    lateinit var binding : ActivityMasterListBinding
+    private lateinit var adapter: MediaListAdapter
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -35,15 +43,87 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         setContentView(R.layout.activity_master_list)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
         setUpToolbarTitle()
+        setOnRefreshListener()
         masterListPresenter.loadMediaList()
-    }
 
+
+
+    }
 
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.title = getString(R.string.app_name)
+        //supportActionBar!!.title = getString(R.string.app_name)
+        supportActionBar!!.title = "Master List"
+
     }
+
+    private fun setOnRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            masterListPresenter.loadMediaList()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        initializeSearchView(menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.about ->         //add the function to perform here
+                invokeSimpleDialog(
+                    getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
+                    getString(R.string.about_description)
+                            + "\n\n\nPublished Date: 7/11/2020"
+                            + "\nDeveloped by : Jeff Arce"
+                )
+            R.id.exit ->         //add the function to perform here
+                finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun initializeSearchView(menu: Menu?) {
+        val searchItem: MenuItem = menu!!.findItem(R.id.action_search)
+        searchView =
+            getActionView(searchItem) as SearchView
+        searchView.setOnCloseListener { true }
+
+        val searchPlate =
+            searchView.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+        searchPlate.hint = "Search by title, artist, kind, genre"
+        searchPlate.setHintTextColor(resources.getColor(R.color.light_gray))
+        searchPlate.setTextColor(resources.getColor(R.color.white))
+
+        val searchPlateView: View = searchView.findViewById(androidx.appcompat.R.id.search_plate)
+        searchPlateView.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                android.R.color.transparent
+            )
+        )
+    }
+
+    private fun setSearchQueryListener(list: List<Media>) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // do your logic here
+                shortToast("Submitted $query")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText!!, list)
+                return false
+            }
+        })
+    }
+
 
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
@@ -52,6 +132,31 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this@MasterListActivity)
         binding.customRecyclerView.layoutManager = layoutManager
         binding.customRecyclerView.adapter = adapter
+
+        setSearchQueryListener(sortedMediaList)
+    }
+
+    private fun filter(text: String,
+                       mediaList: List<Media>) {
+        //new array list that will hold the filtered data
+        val filteredMediaList: ArrayList<Media> = ArrayList()
+
+        //looping through existing elements
+        for (m in mediaList) {
+            //if the existing elements contains the search input
+
+            if (m.trackName.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.artistName.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.genre.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.kind.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault()))
+            ) {
+                //adding the element to filtered list
+                filteredMediaList.add(m)
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        adapter.update(filteredMediaList)
     }
 
     private fun sortByName(list: List<Media>): List<Media> {
@@ -64,11 +169,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     }
 
     override fun hideProgress() {
-        binding.progressBar.visibility = GONE
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showProgress() {
-        binding.progressBar.visibility = VISIBLE
+        binding.swipeRefreshLayout.isRefreshing = true
     }
 
     override fun showToast(message: String) {
@@ -77,9 +182,25 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
 
     override fun showError(message: String) {
         invokeSimpleDialog("Error!",
-            "Retry",
+            "OK",
             message
-        ) { masterListPresenter.loadMediaList() }
+        )
+    }
+
+    override fun showEmptyListError() {
+        invokeSimpleDialog("Error!",
+            "Load Remotely",
+            "Close",
+            "No Data Saved Locally"
+        ) { masterListPresenter.loadMediaListRemotely() }
+    }
+
+    override fun showNoInternetError() {
+        invokeSimpleDialog("Error!",
+            "Retry",
+            "Close",
+            "No Internet Connection"
+        ) { masterListPresenter.loadMediaListRemotely() }
     }
 
 }

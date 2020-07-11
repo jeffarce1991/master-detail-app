@@ -1,11 +1,16 @@
 <!DOCTYPE resources [
-    <!ENTITY app_name "master-detail-app">
+    <!ENTITY app_name "Master Detail App">
     <!ENTITY db_name "master-detail-app-database.sql">
     ]>
 <resources>
     <string name="db_name">&db_name;</string>
-    <string name="app_name">&app_name;</string>
+    <string name="app_name">Master Detail App</string>
     <string name="error">Something went wrong… Please try later!</string>
     <string name="content_description">Sample Content Description</string>
     <string name="cancel">Cancel</string>
+    <string name="search">Search</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+    <string name="about_description">A master-detail application that displays a list of item obtained from iTunes Search API and shows detailed view of each item.</string>
+    <string name="search_hint">Search here..</string>
 </resources>

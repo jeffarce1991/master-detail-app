@@ -16,7 +16,6 @@ fun Activity.invokeSimpleDialog(title: String,
                 onApprove.invoke()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, which ->
-                finish()
                 dialog.dismiss()
 
             }

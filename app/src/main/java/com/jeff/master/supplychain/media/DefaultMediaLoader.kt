@@ -4,6 +4,7 @@ import com.jeff.master.database.local.Media
 import com.jeff.master.database.usecase.local.loader.MediaLocalLoader
 import com.jeff.master.database.usecase.local.saver.MediaLocalSaver
 import com.jeff.master.main.mapper.MediaDtoToMediaMapper
+import com.jeff.master.utilities.exception.EmptyResultException
 import com.jeff.master.webservices.internet.RxInternet
 import com.jeff.master.webservices.usecase.loader.MediaRemoteLoader
 import io.reactivex.Observable
@@ -17,19 +18,10 @@ constructor(private val remoteLoader: MediaRemoteLoader,
             private val localSaver: MediaLocalSaver,
             private val rxInternet: RxInternet): MediaLoader{
 
-    //Loads all data Locally
-    // if data is empty  then load remotely
+    //Load all data from remote else Load all from local
     override fun loadAll(): Single<List<Media>> {
-        return loadAllLocally()
-            .flatMap {
-                if (it.isNotEmpty()) {
-                    Timber.d("==q Media List loaded locally.")
-                    Single.just(it)
-                } else {
-                    Timber.d("==q No existing Media List locally.")
-                    loadAllRemotely()
-                }
-            }
+        return loadAllRemotely()
+            .onErrorResumeNext { loadAllLocally() }
     }
 
     override fun loadAllRemotely(): Single<List<Media>> {
@@ -44,7 +36,14 @@ constructor(private val remoteLoader: MediaRemoteLoader,
 
     override fun loadAllLocally(): Single<List<Media>> {
         return localLoader.loadAll()
-            .flatMap { mediaList -> Single.just(mediaList)}
+            .flatMap { Single.just(it) }
+            /*.flatMap { mediaList ->
+                if (mediaList.isEmpty()) {
+                    Single.error(Throwable(EmptyResultException()))
+                } else {
+                    Single.just(mediaList)
+                }
+            }*/
     }
 
     override fun loadByIdRemotely(id: Int): Single<Media> {

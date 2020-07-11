@@ -1,13 +1,14 @@
 # master-detail-app
 Tech stacks implemented :
   - Kotlin
-  - Retrofit
-  - Proguard
-  - Data Binding
-  - Room Database
-  - MVP (Model-View-Presenter)
   - RxJava
+  - Retrofit
+  - MVP (Model-View-Presenter)
+  - Room Persistence Library
+  - Androidx
   - Recyclerview Adapters
+  - Data Binding
+  - Proguard
 
   Persistence:
 
