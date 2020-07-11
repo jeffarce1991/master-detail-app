@@ -35,6 +35,7 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         setContentView(R.layout.activity_master_list)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_master_list)
         setUpToolbarTitle()
+        setOnRefreshListener()
         masterListPresenter.loadMediaList()
     }
 
@@ -45,6 +46,12 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         supportActionBar!!.title = getString(R.string.app_name)
     }
 
+    private fun setOnRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            masterListPresenter.loadMediaList()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
@@ -64,11 +71,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     }
 
     override fun hideProgress() {
-        binding.progressBar.visibility = GONE
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showProgress() {
-        binding.progressBar.visibility = VISIBLE
+        binding.swipeRefreshLayout.isRefreshing = true
     }
 
     override fun showToast(message: String) {
