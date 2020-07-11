@@ -108,6 +108,23 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
             )
         )
     }
+
+    private fun setSearchQueryListener(list: List<Media>) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // do your logic here
+                shortToast("Submitted $query")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText!!, list)
+                return false
+            }
+        })
+    }
+
+
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
         val sortedMediaList = sortByName(mediaList)
