@@ -17,11 +17,10 @@ import com.jeff.master.databinding.MediaItemBinding
 import com.jeff.master.main.detail.view.MasterDetailActivity
 import com.squareup.picasso.Picasso
 import java.util.*
-import kotlin.Comparator
 
 internal class MediaListAdapter(
     private val context: Context,
-    private val dataList: List<Media>
+    private var dataList: List<Media>
 ) : RecyclerView.Adapter<CustomViewHolder>() {
 
     internal inner class CustomViewHolder(binding: MediaItemBinding) :
@@ -66,6 +65,14 @@ internal class MediaListAdapter(
             )
             context.startActivity(intent)
         }
+    }
+
+    //This method will filter the list
+    //here we are passing the filtered data
+    //and assigning it to the list with notifydatasetchanged method
+    fun update(countries: List<Media>) {
+        dataList = countries
+        notifyDataSetChanged()
     }
 
 
