@@ -18,6 +18,8 @@ Tech stacks implemented :
         - Loads selected Media locally in detail view.
 
   Architecture:
-    - Dependency Injection Dagger2
-    - Model View Presenter Pattern
-    - Adapter Pattern
+
+    Used Common Design Pattern
+        - Dependency Injection Dagger2
+        - Model View Presenter Pattern
+        - Adapter Pattern
