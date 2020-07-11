@@ -1,33 +1,41 @@
 package com.jeff.master.main.list.view
 
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuItemCompat.getActionView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby.mvp.MvpActivity
+import com.jeff.master.BuildConfig
 import com.jeff.master.R
 import com.jeff.master.adapter.MediaListAdapter
 import com.jeff.master.android.base.extension.invokeSimpleDialog
 import com.jeff.master.android.base.extension.longToast
+import com.jeff.master.android.base.extension.shortToast
 import com.jeff.master.database.local.Media
 import com.jeff.master.databinding.ActivityMasterListBinding
 import com.jeff.master.main.list.presenter.MasterListPresenter
 import dagger.android.AndroidInjection
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
     MasterListView {
-    private lateinit var adapter: MediaListAdapter
-
-    lateinit var binding : ActivityMasterListBinding
-
 
     @Inject
     internal lateinit var masterListPresenter: MasterListPresenter
 
+    lateinit var binding : ActivityMasterListBinding
+    private lateinit var adapter: MediaListAdapter
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -37,13 +45,17 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         setUpToolbarTitle()
         setOnRefreshListener()
         masterListPresenter.loadMediaList()
-    }
 
+
+
+    }
 
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.title = getString(R.string.app_name)
+        //supportActionBar!!.title = getString(R.string.app_name)
+        supportActionBar!!.title = "Master List"
+
     }
 
     private fun setOnRefreshListener() {
@@ -51,6 +63,21 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
             masterListPresenter.loadMediaList()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.about ->         //add the function to perform here
+                invokeSimpleDialog(
+                    getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
+                    getString(R.string.about_description)
+                            + "\n\n\nPublished Date: 7/11/2020"
+                            + "\nDeveloped by : Jeff Arce"
+                )
+            R.id.exit ->         //add the function to perform here
+                finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
     //Method to generate List of data using RecyclerView with custom com.project.retrofit.adapter*//*
     override fun generateDataList(mediaList: List<Media>) {
