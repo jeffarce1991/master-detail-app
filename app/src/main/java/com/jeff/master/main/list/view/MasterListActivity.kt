@@ -136,6 +136,27 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         setSearchQueryListener(sortedMediaList)
     }
 
+    private fun filter(text: String,
+                       mediaList: List<Media>) {
+        //new array list that will hold the filtered data
+        val filteredMediaList: ArrayList<Media> = ArrayList()
+
+        //looping through existing elements
+        for (m in mediaList) {
+            //if the existing elements contains the search input
+
+            if (m.trackName.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.artistName.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.genre.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault())) ||
+                m.kind.toLowerCase(Locale.getDefault()).contains(text.toLowerCase(Locale.getDefault()))
+            ) {
+                //adding the element to filtered list
+                filteredMediaList.add(m)
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        adapter.update(filteredMediaList)
     }
 
     private fun sortByName(list: List<Media>): List<Media> {
