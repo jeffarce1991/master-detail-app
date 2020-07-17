@@ -46,16 +46,14 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         setOnRefreshListener()
         masterListPresenter.loadMediaList()
 
-
-
     }
+
 
     private fun setUpToolbarTitle() {
         setSupportActionBar(binding.toolbar)
 
         //supportActionBar!!.title = getString(R.string.app_name)
         supportActionBar!!.title = "Master List"
-
     }
 
     private fun setOnRefreshListener() {
@@ -77,11 +75,11 @@ class MasterListActivity : MvpActivity<MasterListView, MasterListPresenter>(),
         when (item.itemId) {
             R.id.about ->         //add the function to perform here
                 invokeSimpleDialog(
-                    getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
-                    getString(R.string.about_description)
-                            + "\n\n\nPublished Date: 7/11/2020"
-                            + "\nDeveloped by : Jeff Arce"
-                )
+                        getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
+        getString(R.string.about_description)
+                + "\n\n\nPublished Date: 7/11/2020"
+                + "\nDeveloped by : Jeff Arce"
+            )
             R.id.exit ->         //add the function to perform here
                 finish()
         }
